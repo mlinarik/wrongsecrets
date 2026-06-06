@@ -15,6 +15,8 @@ import org.springframework.security.web.PortMapper;
 import org.springframework.security.web.PortMapperImpl;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -40,11 +42,16 @@ public class SecurityConfig {
                 auth ->
                     User.builder()
                         .username(auth.username())
-                        .password("{noop}" + auth.password())
+                        .password(passwordEncoder().encode(auth.password()))
                         .roles(auth.role())
                         .build())
             .toList();
     return new InMemoryUserDetailsManager(users);
+  }
+
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 
   private void configureCsrf(HttpSecurity http) throws Exception {

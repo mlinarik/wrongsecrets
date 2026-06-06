@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.owasp.wrongsecrets.canaries.CanaryCounter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ public class StatsController {
 
   @GetMapping("/stats")
   @Operation(description = "Returns all dynamic data for the stats screen")
+  @PreAuthorize("hasRole('ADMIN')")
   public String getStats(Model model) {
     model.addAttribute("canaryCounter", canaryCounter.getTotalCount());
     model.addAttribute("sessioncounter", sessionConfiguration.getCounter());

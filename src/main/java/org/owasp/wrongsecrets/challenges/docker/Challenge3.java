@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class Challenge3 extends FixedAnswerChallenge {
 
-  private final String hardcodedEnvPassword;
+  private final String envPassword;
 
-  public Challenge3(@Value("${DOCKER_ENV_PASSWORD}") String hardcodedEnvPassword) {
-    this.hardcodedEnvPassword = hardcodedEnvPassword;
+  public Challenge3(@Value("${DOCKER_ENV_PASSWORD}") String envPassword) {
+    this.envPassword = envPassword;
   }
 
   @Override
   public String getAnswer() {
-    return hardcodedEnvPassword;
+    return envPassword;
   }
 }

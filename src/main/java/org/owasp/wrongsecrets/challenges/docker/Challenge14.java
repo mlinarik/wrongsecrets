@@ -32,7 +32,15 @@ public class Challenge14 extends FixedAnswerChallenge {
       @Value("${keepasspath}") String filePath) {
     this.keepassxPassword = keepassxPassword;
     this.defaultKeepassValue = defaultKeepassValue;
-    this.filePath = filePath;
+    this.filePath = sanitizeFilePath(filePath);
+  }
+
+  private String sanitizeFilePath(String filePath) {
+    // Basic sanitization to prevent path traversal
+    if (filePath.contains("..") || filePath.contains("/.") || filePath.contains("\\.")) {
+      throw new IllegalArgumentException("Invalid file path");
+    }
+    return filePath;
   }
 
   @SuppressFBWarnings("PATH_TRAVERSAL_IN")

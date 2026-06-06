@@ -6,7 +6,7 @@ public interface Challenge {
   /**
    * Returns a Spoiler object containing the secret for the challenge.
    *
-   * @return Spoiler with anser
+   * @return Spoiler with answer
    */
   Spoiler spoiler();
 

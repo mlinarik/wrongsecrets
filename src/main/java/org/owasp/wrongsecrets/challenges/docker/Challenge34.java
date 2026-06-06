@@ -30,12 +30,19 @@ public class Challenge34 extends FixedAnswerChallenge {
     // note the static salt in use to get to the same key. otherwise the key is not reusable.
     Pbkdf2PasswordEncoder encoder =
         new Pbkdf2PasswordEncoder(
-            "secret_salt",
+            generateSalt(),
             0,
             100000,
             Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
     encoder.setEncodeHashAsBase64(true);
 
     return encoder.encode(encryptedKey);
+  }
+
+  private String generateSalt() {
+    // Generate a random salt (e.g., using SecureRandom)
+    byte[] salt = new byte[16];
+    new java.security.SecureRandom().nextBytes(salt);
+    return java.util.Base64.getEncoder().encodeToString(salt);
   }
 }

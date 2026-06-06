@@ -9,6 +9,6 @@ public class Challenge1 extends FixedAnswerChallenge {
 
   @Override
   public String getAnswer() {
-    return WrongSecretsConstants.password;
+    return System.getenv("WRONG_SECRETS_PASSWORD");
   }
 }

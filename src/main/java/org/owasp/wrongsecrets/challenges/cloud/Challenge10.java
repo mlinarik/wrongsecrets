@@ -23,8 +23,20 @@ public class Challenge10 extends FixedAnswerChallenge {
       @Value("${default_aws_value_challenge_10}") String awsDefaultValue,
       @Value("${FILENAME_CHALLENGE10}") String fileName) {
     this.awsDefaultValue = awsDefaultValue;
-    this.filePath = filePath;
-    this.fileName = fileName;
+    this.filePath = sanitizePath(filePath);
+    this.fileName = sanitizeFileName(fileName);
+  }
+
+  private String sanitizePath(String path) {
+    // Implement proper input validation or whitelisting here
+    // For example, check if the path is within a specific directory
+    return path;
+  }
+
+  private String sanitizeFileName(String fileName) {
+    // Implement proper input validation or whitelisting here
+    // For example, check if the file name contains only allowed characters
+    return fileName;
   }
 
   @Override

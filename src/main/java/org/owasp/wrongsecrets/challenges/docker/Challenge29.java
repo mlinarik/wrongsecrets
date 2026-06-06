@@ -26,6 +26,9 @@ public class Challenge29 extends FixedAnswerChallenge {
   }
 
   private byte[] decode(byte[] encoded, PrivateKey privateKey) throws Exception {
+    if (encoded == null || encoded.length == 0) {
+      throw new IllegalArgumentException("Encoded data is empty or null");
+    }
     Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
     cipher.init(Cipher.DECRYPT_MODE, privateKey);
     return cipher.doFinal(encoded);
@@ -35,25 +38,16 @@ public class Challenge29 extends FixedAnswerChallenge {
       value = "DMI_HARDCODED_ABSOLUTE_FILENAME",
       justification = "This is embededded in the container")
   private String getKey() throws IOException {
-    String privateKeyFilePath = "src/test/resources/RSAprivatekey.pem";
+    String privateKeyFilePath = System.getenv("PRIVATE_KEY_PATH");
+    if (privateKeyFilePath == null || privateKeyFilePath.isEmpty()) {
+      throw new IllegalArgumentException("Private key path not set in environment variable");
+    }
     byte[] content;
     try {
       content = Files.readAllBytes(Paths.get(privateKeyFilePath));
     } catch (IOException e) {
       log.info("Could not get the file from {}", privateKeyFilePath);
-      privateKeyFilePath = "/var/tmp/helpers/RSAprivatekey.pem";
-      try {
-        content = Files.readAllBytes(Paths.get(privateKeyFilePath));
-      } catch (IOException e2) {
-        log.info("Could not get the file from {}", privateKeyFilePath);
-        privateKeyFilePath = "/var/helpers/RSAprivatekey.pem";
-        try {
-          content = Files.readAllBytes(Paths.get(privateKeyFilePath));
-        } catch (IOException e3) {
-          log.info("Could not get the file from {}", privateKeyFilePath);
-          throw e3;
-        }
-      }
+      throw e;
     }
     String privateKeyContent = new String(content, StandardCharsets.UTF_8);
     privateKeyContent = privateKeyContent.replace("-----BEGIN PRIVATE KEY-----", "");

@@ -13,6 +13,7 @@ import org.owasp.wrongsecrets.definitions.ChallengeDefinitionsConfiguration;
 import org.owasp.wrongsecrets.definitions.Difficulty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,6 +50,7 @@ public class ChallengesCtfController {
       summary =
           "Gives all hints back in a jsonArray, to be used with the Juiceshop CTF cli v12+."
               + " Each challenge contributes one hint entry.")
+  @PreAuthorize("hasRole('ADMIN')")
   public String getHints() {
     var json = JsonNodeFactory.instance.objectNode();
     ArrayNode jsonArray = JsonNodeFactory.instance.arrayNode();
@@ -98,12 +100,6 @@ public class ChallengesCtfController {
           definition
               .source(runtimeEnvironment)
               .map(s -> s.explanation().contents().get())
-              .orElse(disabledChallenge));
-      jsonChallenge.put(
-          "hint",
-          definition
-              .source(runtimeEnvironment)
-              .map(s -> s.hint().contents().get())
               .orElse(disabledChallenge));
       jsonChallenge.put("solved", scoreCard.getChallengeCompleted(definition));
       String disabledEnv = getDisabledEnv(definition);

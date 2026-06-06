@@ -19,7 +19,7 @@ public class Challenge12 extends FixedAnswerChallenge {
   private final String dockerMountPath;
 
   public Challenge12(@Value("${challengedockermtpath}") String dockerMountPath) {
-    this.dockerMountPath = dockerMountPath;
+    this.dockerMountPath = sanitizeInput(dockerMountPath);
   }
 
   @Override
@@ -40,5 +40,16 @@ public class Challenge12 extends FixedAnswerChallenge {
           e);
       return FILE_MOUNT_ERROR;
     }
+  }
+
+  private String sanitizeInput(String input) {
+    if (input == null || input.isEmpty()) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+    // Prevent directory traversal by ensuring no '../' sequences are present
+    if (input.contains("..")) {
+      throw new IllegalArgumentException("Invalid path: " + input);
+    }
+    return input;
   }
 }

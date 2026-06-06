@@ -27,9 +27,17 @@ public class Challenge11Gcp extends FixedAnswerChallenge {
       @Value("${default_aws_value_challenge_11}") String ctfValue,
       @Value("${ctf_enabled}") boolean ctfEnabled) {
     this.gcpDefaultValue = gcpDefaultValue;
-    this.projectId = projectId;
+    this.projectId = sanitizeProjectId(projectId);
     this.ctfValue = ctfValue;
     this.ctfEnabled = ctfEnabled;
+  }
+
+  private String sanitizeProjectId(String projectId) {
+    // Simple validation to ensure projectId only contains alphanumeric characters and hyphens
+    if (projectId == null || !projectId.matches("^[a-z0-9-]+$")) {
+      throw new IllegalArgumentException("Invalid project ID");
+    }
+    return projectId;
   }
 
   @Override

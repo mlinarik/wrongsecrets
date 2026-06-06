@@ -48,10 +48,10 @@ public class Challenge35 extends FixedAnswerChallenge {
           NoSuchAlgorithmException,
           IllegalBlockSizeException,
           BadPaddingException {
-    IvParameterSpec iv = new IvParameterSpec("1234567890123456".getBytes(StandardCharsets.UTF_8));
+    IvParameterSpec iv = new IvParameterSpec(System.getenv("AES_IV").getBytes(StandardCharsets.UTF_8));
     SecretKeySpec skeySpec =
         new SecretKeySpec(
-            "12345678901234561234567890123456".getBytes(StandardCharsets.UTF_8), "AES");
+            System.getenv("AES_KEY").getBytes(StandardCharsets.UTF_8), "AES");
 
     Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
     cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);

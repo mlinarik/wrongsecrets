@@ -42,6 +42,10 @@ public class AsciiDoctorTemplateResolver extends FileTemplateResolver {
   }
 
   private String computeResourceName(String resourceName) {
+    // Validate and sanitize the input to prevent OS command injection
+    if (!resourceName.matches("^[a-zA-Z0-9._-]+$")) {
+      throw new IllegalArgumentException("Invalid resource name");
+    }
     return String.format("%s", resourceName.replace(".adoc", ""));
   }
 }

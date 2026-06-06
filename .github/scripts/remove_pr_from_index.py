@@ -4,9 +4,13 @@ import sys
 import os
 from datetime import datetime
 
+def sanitize_input(input_string):
+    # Simple sanitization to prevent regex injection
+    return re.escape(input_string)
 
 def main():
     pr_number = os.environ.get("PR_NUMBER", "unknown")
+    sanitized_pr_number = sanitize_input(pr_number)
 
     try:
         with open("/tmp/cleaned-site/index.html", "r") as f:
@@ -14,7 +18,7 @@ def main():
 
         # Remove the PR card for this specific PR number
         card_pattern = (
-            rf'<div class="pr-card"[^>]*data-pr="{pr_number}"[^>]*>.*?</div>\s*</div>'
+            rf'<div class="pr-card"[^>]*data-pr="{sanitized_pr_number}"[^>]*>.*?</div>\s*</div>'
         )
         updated_content = re.sub(card_pattern, "", content, flags=re.DOTALL)
 

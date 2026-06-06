@@ -96,6 +96,9 @@ func validateChallengesEnabled(statusCode int, body string) bool {
 }
 
 func execute(script string, command []string) (bool, error) {
+	if !isValidScript(script) || !isValidCommand(command) {
+		return false, fmt.Errorf("invalid script or command")
+	}
 
 	cmd := &exec.Cmd{
 		Path:   script,
@@ -115,4 +118,14 @@ func execute(script string, command []string) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func isValidScript(script string) bool {
+	// Add your validation logic here, e.g., check if the script is in a whitelist
+	return script == "./k8s-vault-gcp-start.sh"
+}
+
+func isValidCommand(command []string) bool {
+	// Add your validation logic here, e.g., check if the command is in a whitelist
+	return len(command) == 1 && command[0] == "./k8s-vault-gcp-start.sh"
 }

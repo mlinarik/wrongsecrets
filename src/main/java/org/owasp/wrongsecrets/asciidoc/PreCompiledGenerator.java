@@ -15,12 +15,16 @@ import org.springframework.util.FileCopyUtils;
 @Slf4j
 public class PreCompiledGenerator implements TemplateGenerator {
 
+  private static final String ALLOWED_TEMPLATE = "allowed-template.html";
+
   @Override
   public String generate(String name) throws IOException {
-    var templateFile = name + ".html";
+    if (!ALLOWED_TEMPLATE.equals(name + ".html")) {
+      throw new IllegalArgumentException("Invalid template name");
+    }
 
     try (var bos = new ByteArrayOutputStream()) {
-      FileCopyUtils.copy(new ClassPathResource(templateFile).getInputStream(), bos);
+      FileCopyUtils.copy(new ClassPathResource(ALLOWED_TEMPLATE).getInputStream(), bos);
       return bos.toString(UTF_8);
     }
   }

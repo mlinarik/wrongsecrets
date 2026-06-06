@@ -16,7 +16,7 @@ import java.util.Objects;
  */
 public abstract class FixedAnswerChallenge implements Challenge {
 
-  private Supplier<String> cachedAnswer = Suppliers.memoize(() -> getAnswer());
+  private Supplier<String> cachedAnswer = Suppliers.memoize(() -> getAnswerFromEnvironment());
 
   @Override
   public final Spoiler spoiler() {
@@ -28,5 +28,5 @@ public abstract class FixedAnswerChallenge implements Challenge {
     return Objects.equals(cachedAnswer.get(), answer);
   }
 
-  public abstract String getAnswer();
+  protected abstract String getAnswerFromEnvironment();
 }

@@ -43,6 +43,13 @@ public class ChallengeUiTemplateResolver extends FileTemplateResolver {
     if (!StringUtils.hasText(templateName) || "null".equals(templateName)) {
       return new StringTemplateResource("<script></script>");
     }
+    
+    // Validate and sanitize the templateName to prevent directory traversal
+    if (templateName.contains("..") || templateName.contains("/")) {
+      log.error("Invalid template name: {}", templateName);
+      return new StringTemplateResource("");
+    }
+
     byte[] resource = resources.get(templateName);
     if (resource == null) {
       try {

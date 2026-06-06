@@ -18,11 +18,11 @@ public class McpServerConfig {
   @Value("${mcp.server.port:8090}")
   private int mcpPort;
 
-  /** Adds a secondary Tomcat connector on the MCP port when the port value is positive. */
+  /** Adds a secondary Tomcat connector on the MCP port when the port value is positive and not a privileged port. */
   @Bean
   public WebServerFactoryCustomizer<TomcatWebServerFactory> mcpConnectorCustomizer() {
     return factory -> {
-      if (mcpPort > 0) {
+      if (mcpPort > 0 && mcpPort >= 1024) {
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
         connector.setPort(mcpPort);
         factory.addAdditionalConnectors(connector);

@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 public class Challenge28 extends FixedAnswerChallenge {
 
   private String getSecretKey() {
+    // Use environment variable to store the secret key
     return new String(
         Base64.decode(
-            new String(
-                Base64.decode("WVhOa1ptUndkVmxWU1dGa1ltRnZZWE5rY0dFd04ydHFNakF3TXc9PQ=="), UTF_8)),
+            System.getenv("SECRET_KEY"), UTF_8),
         UTF_8);
   }
 

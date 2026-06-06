@@ -37,7 +37,7 @@ public class Challenge32 extends FixedAnswerChallenge {
     try {
       final Cipher decryptor = Cipher.getInstance("AES/GCM/NoPadding");
       SecretKey decryptKey =
-          new SecretKeySpec("AIKnowsThisKey12".getBytes(StandardCharsets.UTF_8), "AES");
+          new SecretKeySpec(System.getenv("SECRET_KEY").getBytes(StandardCharsets.UTF_8), "AES");
       AlgorithmParameterSpec gcmIv =
           new GCMParameterSpec(128, Base64.decode(cipherTextString), 0, 12);
       decryptor.init(Cipher.DECRYPT_MODE, decryptKey, gcmIv);

@@ -23,7 +23,11 @@ public class CanaryCounterImpl implements CanaryCounter {
 
   @Override
   public void setLastCanaryToken(String tokenContent) {
-    lastToken = tokenContent;
+    if (tokenContent != null && tokenContent.matches("^[a-zA-Z0-9]+$")) {
+      lastToken = tokenContent;
+    } else {
+      throw new IllegalArgumentException("Invalid token content");
+    }
   }
 
   @Override

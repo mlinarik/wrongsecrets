@@ -29,7 +29,9 @@ public class IndexController {
     if ((!"not_set".equals(ctfServerAddress)) && !Strings.isNullOrEmpty(ctfServerAddress)) {
       model.addAttribute("ctfServerAddress", ctfServerAddress);
     } else {
-      model.addAttribute("totalScore", scoreCard.getTotalReceivedPoints());
+      // Obfuscate the total score before exposing it
+      int obfuscatedScore = scoreCard.getTotalReceivedPoints() % 100; // Example obfuscation
+      model.addAttribute("totalScore", obfuscatedScore);
     }
 
     return "welcome";

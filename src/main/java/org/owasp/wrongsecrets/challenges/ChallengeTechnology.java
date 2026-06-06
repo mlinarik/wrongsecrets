@@ -1,6 +1,7 @@
 package org.owasp.wrongsecrets.challenges;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 /** provides the technology used within a challenge. */
 public class ChallengeTechnology {
@@ -31,10 +32,15 @@ public class ChallengeTechnology {
     }
 
     static ChallengeTechnology.Tech fromId(String id) {
-      return Arrays.stream(ChallengeTechnology.Tech.values())
+      Optional<ChallengeTechnology.Tech> techOptional = Arrays.stream(ChallengeTechnology.Tech.values())
           .filter(e -> e.id.equalsIgnoreCase(id))
-          .findAny()
-          .get();
+          .findAny();
+      
+      if (techOptional.isPresent()) {
+        return techOptional.get();
+      } else {
+        throw new IllegalArgumentException("Invalid Tech ID: " + id);
+      }
     }
   }
 }

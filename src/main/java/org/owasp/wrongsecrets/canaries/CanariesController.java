@@ -54,6 +54,9 @@ public class CanariesController {
               content = @Content(schema = @Schema(implementation = String.class)),
               required = true))
   public ResponseEntity<String> processCanaryTokendebug(@RequestBody String canarytokenContents) {
+    if (canarytokenContents == null || !canarytokenContents.matches("^[a-zA-Z0-9-_]+$")) {
+      return new ResponseEntity<>("Invalid input", HttpStatus.BAD_REQUEST);
+    }
     canaryCounter.upCallBackCounter();
     canaryCounter.setLastCanaryToken(canarytokenContents);
     return new ResponseEntity<>("all good", HttpStatus.ACCEPTED);

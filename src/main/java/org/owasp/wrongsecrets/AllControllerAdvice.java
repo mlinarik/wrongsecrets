@@ -58,10 +58,7 @@ public class AllControllerAdvice {
     model.addAttribute("version", version);
   }
 
-  @ModelAttribute
-  public void addRequest(Model model, HttpServletRequest request) {
-    model.addAttribute("requestURI", request.getRequestURI());
-  }
+  // Removed the addRequest method to fix CWE-200: Information Exposure
 
   @ModelAttribute
   public void addRuntimeEnvironment(Model model) {

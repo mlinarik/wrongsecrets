@@ -20,6 +20,11 @@ public class AsciiDocGenerator implements TemplateGenerator {
 
   @Override
   public String generate(String name) throws IOException {
+    // Validate and sanitize the input to prevent directory traversal
+    if (!name.matches("^[a-zA-Z0-9_-]+$")) {
+      throw new IllegalArgumentException("Invalid file name");
+    }
+
     var templateFile = name + ".adoc";
     try (var is = new ClassPathResource(templateFile).getInputStream()) {
       var writer = new StringWriter();

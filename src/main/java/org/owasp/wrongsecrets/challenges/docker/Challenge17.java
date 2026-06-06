@@ -18,7 +18,7 @@ public class Challenge17 extends FixedAnswerChallenge {
   private final String dockerMountPath;
 
   public Challenge17(@Value("${challengedockermtpath}") String dockerMountPath) {
-    this.dockerMountPath = dockerMountPath;
+    this.dockerMountPath = sanitizePath(dockerMountPath);
   }
 
   @Override
@@ -36,5 +36,12 @@ public class Challenge17 extends FixedAnswerChallenge {
       log.warn("Exception during file reading, defaulting to default without cloud environment", e);
       return Challenges.ErrorResponses.FILE_MOUNT_ERROR;
     }
+  }
+
+  private String sanitizePath(String path) {
+    if (path.contains("..") || path.contains("/.") || path.contains("\\.")) {
+      throw new IllegalArgumentException("Invalid path: " + path);
+    }
+    return path;
   }
 }

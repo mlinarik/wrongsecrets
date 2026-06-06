@@ -36,10 +36,12 @@ public class WrongSecretsApplication {
   }
 
   @Bean
-  public RestClient restClient(RestClient.Builder builder) {
+  public RestClient restClient(RestClient.Builder builder, 
+                              @Value("${rest.client.connect.timeout:5}") int connectTimeout,
+                              @Value("${rest.client.read.timeout:10}") int readTimeout) {
     SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-    factory.setConnectTimeout(Duration.ofSeconds(5));
-    factory.setReadTimeout(Duration.ofSeconds(10));
+    factory.setConnectTimeout(Duration.ofSeconds(connectTimeout));
+    factory.setReadTimeout(Duration.ofSeconds(readTimeout));
     return builder.requestFactory(factory).build();
   }
 }

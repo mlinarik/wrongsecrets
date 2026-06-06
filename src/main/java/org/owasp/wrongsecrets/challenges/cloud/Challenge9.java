@@ -31,8 +31,22 @@ public class Challenge9 extends FixedAnswerChallenge {
       @Value("${default_aws_value_challenge_9}") String awsDefaultValue,
       @Value("${FILENAME_CHALLENGE9}") String fileName) {
     this.awsDefaultValue = awsDefaultValue;
-    this.filePath = filePath;
-    this.fileName = fileName;
+    this.filePath = sanitizePath(filePath);
+    this.fileName = sanitizeFileName(fileName);
+  }
+
+  private String sanitizePath(String path) {
+    if (path.contains("..") || path.contains("/") || path.contains("\\")) {
+      throw new IllegalArgumentException("Invalid path");
+    }
+    return path;
+  }
+
+  private String sanitizeFileName(String fileName) {
+    if (fileName.contains("..") || fileName.contains("/") || fileName.contains("\\")) {
+      throw new IllegalArgumentException("Invalid file name");
+    }
+    return fileName;
   }
 
   @SuppressFBWarnings(

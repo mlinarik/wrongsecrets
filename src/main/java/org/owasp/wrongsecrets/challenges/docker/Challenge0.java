@@ -9,6 +9,6 @@ public class Challenge0 extends FixedAnswerChallenge {
 
   @Override
   public String getAnswer() {
-    return "The first answer";
+    return System.getenv("CHALLENGE_0_ANSWER");
   }
 }

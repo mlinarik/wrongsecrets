@@ -40,7 +40,7 @@ public class Challenge11Aws extends FixedAnswerChallenge {
       @Value("${default_aws_value_challenge_11}") String ctfValue,
       @Value("${ctf_enabled}") boolean ctfEnabled) {
     this.awsRoleArn = awsRoleArn;
-    this.tokenFileLocation = tokenFileLocation;
+    this.tokenFileLocation = sanitizeInput(tokenFileLocation);
     this.awsRegion = awsRegion;
     this.awsDefaultValue = awsDefaultValue;
     this.ctfValue = ctfValue;
@@ -114,5 +114,16 @@ public class Challenge11Aws extends FixedAnswerChallenge {
       log.info("Skipping credentials from AWS");
     }
     return awsDefaultValue;
+  }
+
+  private String sanitizeInput(String input) {
+    if (input == null || input.isEmpty()) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+    // Simple path traversal prevention
+    if (input.contains("..") || input.contains("/") || input.contains("\\")) {
+      throw new IllegalArgumentException("Path traversal detected");
+    }
+    return input;
   }
 }

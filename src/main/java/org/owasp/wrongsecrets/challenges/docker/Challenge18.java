@@ -20,6 +20,7 @@ public class Challenge18 implements Challenge {
   private final String hashPassword;
   private static final String md5Hash = "MD5";
   private static final String sha1Hash = "SHA1";
+  private static final String sha256Hash = "SHA-256";
 
   public Challenge18(@Value("aHVudGVyMg==") String hashPassword) {
     this.hashPassword = hashPassword;
@@ -35,6 +36,9 @@ public class Challenge18 implements Challenge {
       if (md5Hash.equals(hash) || sha1Hash.equals(hash)) {
         // codeql[java/weak-cryptographic-algorithm] Intentionally weak algorithm for educational
         // challenge about weak hash mechanisms
+        var md = MessageDigest.getInstance(hash);
+        return new String(Hex.encode(md.digest(input.getBytes(StandardCharsets.UTF_8))));
+      } else if (sha256Hash.equals(hash)) {
         var md = MessageDigest.getInstance(hash);
         return new String(Hex.encode(md.digest(input.getBytes(StandardCharsets.UTF_8))));
       }
@@ -55,6 +59,8 @@ public class Challenge18 implements Challenge {
   public boolean answerCorrect(String answer) {
     return calculateHash(md5Hash, base64Decode(hashPassword)).equals(calculateHash(md5Hash, answer))
         || calculateHash(sha1Hash, base64Decode(hashPassword))
-            .equals(calculateHash(sha1Hash, answer));
+            .equals(calculateHash(sha1Hash, answer))
+        || calculateHash(sha256Hash, base64Decode(hashPassword))
+            .equals(calculateHash(sha256Hash, answer));
   }
 }

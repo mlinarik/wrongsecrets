@@ -19,9 +19,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class Challenge25 extends FixedAnswerChallenge {
   private final String cipherText;
+  private final String secretKey;
 
-  public Challenge25(@Value("${challenge25ciphertext}") String cipherText) {
+  public Challenge25(@Value("${challenge25ciphertext}") String cipherText, @Value("${challenge25secretkey}") String secretKey) {
     this.cipherText = cipherText;
+    this.secretKey = secretKey;
   }
 
   @Override
@@ -33,7 +35,7 @@ public class Challenge25 extends FixedAnswerChallenge {
     try {
       final Cipher decryptor = Cipher.getInstance("AES/GCM/NoPadding");
       SecretKey decryptKey =
-          new SecretKeySpec("thiszthekeytoday".getBytes(StandardCharsets.UTF_8), "AES");
+          new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
       AlgorithmParameterSpec gcmIv = new GCMParameterSpec(128, Base64.decode(cipherText), 0, 12);
       decryptor.init(Cipher.DECRYPT_MODE, decryptKey, gcmIv);
       return new String(

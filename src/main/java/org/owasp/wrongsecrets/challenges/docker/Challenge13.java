@@ -63,10 +63,8 @@ public class Challenge13 implements Challenge {
       int gcmTagLengthInBytes = 16;
       int gcmIVLengthInBytes = 12;
       byte[] initializationVector = new byte[gcmIVLengthInBytes];
-      Arrays.fill(
-          initializationVector,
-          (byte) 0); // done for "poor-man's convergent encryption", please check actual convergent
-      // cryptosystems for better implementation ;-)
+      SecureRandom secureRandom = new SecureRandom();
+      secureRandom.nextBytes(initializationVector);
       GCMParameterSpec gcmParameterSpec =
           new GCMParameterSpec(gcmTagLengthInBytes * 8, initializationVector);
       cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmParameterSpec);

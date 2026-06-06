@@ -264,9 +264,9 @@ public class ChallengesController {
               }
             } else if (challenge instanceof Challenge37) {
               if (!Strings.isNullOrEmpty(getKeyToProvideToHostChallenge37)
-                  && !keyToProvideToHostForChallenge30.equals(
+                  && !getKeyToProvideToHostChallenge37.equals(
                       "not_set")) { // this means that it was overriden with a code that needs to be
-                // returned to the ctf key exchange hos
+                // returned to the ctf key exchange host.
                 model.addAttribute(
                     "answerCorrect",
                     "Your answer is correct! "
@@ -306,12 +306,10 @@ public class ChallengesController {
   // TODO extract this to the challenge definition @see ChallengeAPIController with nested if
   // statement
   private String generateCode(ChallengeDefinition challenge) {
-    // codeql[java/weak-cryptographic-algorithm] Intentional HmacSHA1 for CTF code generation - this
-    // is educational/functional, not security-critical
     SecretKeySpec secretKeySpec =
-        new SecretKeySpec(ctfKey.getBytes(StandardCharsets.UTF_8), "HmacSHA1");
+        new SecretKeySpec(ctfKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
     try {
-      Mac mac = Mac.getInstance("HmacSHA1"); // NOSONAR
+      Mac mac = Mac.getInstance("HmacSHA256"); // NOSONAR
       mac.init(secretKeySpec);
       byte[] result = mac.doFinal(challenge.name().name().getBytes(StandardCharsets.UTF_8));
       return new String(Hex.encode(result));

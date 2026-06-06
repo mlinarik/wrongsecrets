@@ -109,6 +109,9 @@ func validateChallengesEnabled(statusCode int, body string) bool {
 }
 
 func execute(script string, command []string) (bool, error) {
+	if script != START_SCRIPT && script != LB_SCRIPT && script != LB_CLEANUP_SCRIPT {
+		return false, fmt.Errorf("invalid script provided: %s", script)
+	}
 
 	cmd := &exec.Cmd{
 		Path:   script,

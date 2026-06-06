@@ -54,20 +54,32 @@ public class RuntimeEnvironment {
   }
 
   private boolean isK8sUnlockedInCTFMode() {
-    String defaultValueChallenge5 = "if_you_see_this_please_use_k8s";
+    String defaultValueChallenge5 = System.getenv("DEFAULT_K8S_SECRET");
+    if (defaultValueChallenge5 == null) {
+      defaultValueChallenge5 = "if_you_see_this_please_use_k8s";
+    }
     return ctfModeEnabled && !challenge5Value.equals(defaultValueChallenge5);
   }
 
   private boolean isVaultUnlockedInCTFMode() {
-    String defaultVaultAnswer = "ACTUAL_ANSWER_CHALLENGE7";
-    String secondDefaultVaultAnswer = "if_you_see_this_please_use_K8S_and_Vault";
+    String defaultVaultAnswer = System.getenv("DEFAULT_VAULT_ANSWER");
+    if (defaultVaultAnswer == null) {
+      defaultVaultAnswer = "ACTUAL_ANSWER_CHALLENGE7";
+    }
+    String secondDefaultVaultAnswer = System.getenv("SECOND_DEFAULT_VAULT_ANSWER");
+    if (secondDefaultVaultAnswer == null) {
+      secondDefaultVaultAnswer = "if_you_see_this_please_use_K8S_and_Vault";
+    }
     return ctfModeEnabled
         && !challenge7Value.equals(defaultVaultAnswer)
         && !challenge7Value.equals(secondDefaultVaultAnswer);
   }
 
   private boolean isCloudUnlockedInCTFMode() {
-    String defaultValueAWSValue = "if_you_see_this_please_use_AWS_Setup";
+    String defaultValueAWSValue = System.getenv("DEFAULT_AWS_VALUE");
+    if (defaultValueAWSValue == null) {
+      defaultValueAWSValue = "if_you_see_this_please_use_AWS_Setup";
+    }
     return ctfModeEnabled && !defaultChallenge9Value.equals(defaultValueAWSValue);
   }
 

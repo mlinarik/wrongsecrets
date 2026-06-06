@@ -18,11 +18,16 @@ public class Challenge23 extends FixedAnswerChallenge {
   }
 
   private String getActualData() {
+    // Replace the hardcoded secret with an environment variable or secrets management service
+    String encodedSecret = System.getenv("CHALLENGE_23_SECRET");
+    if (encodedSecret == null) {
+      throw new RuntimeException("Environment variable CHALLENGE_23_SECRET is not set");
+    }
     return new String(
         Base64.decode(
             Hex.decode(
                 Base64.decode(
-                    "NTYzMjY4MzU1MTMyMzk3NDYyNTc1Njc1NjQ0ODRlNDI2MzMxNDI2ODYzMzM0ZTdhNjQzMjM5Nzk1YTQ1NDY3OTVhNTU0YTY4NWE0NDRkMzA0ZTU2Mzg2Yg=="))),
+                    encodedSecret))),
         StandardCharsets.UTF_8);
   }
 }

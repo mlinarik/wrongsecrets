@@ -20,6 +20,23 @@ public class AdditionalCanaryData {
   private final String useragent;
   private final String referer;
   private final String location;
+
+  // Sanitize or obfuscate the 'useragent' and 'location' fields before exposure
+  public String getUserAgentForDisplay() {
+    return sanitize(useragent);
+  }
+
+  public String getLocationForDisplay() {
+    return sanitize(location);
+  }
+
+  private String sanitize(String input) {
+    if (input == null) {
+      return null;
+    }
+    // Example sanitization: replace all characters with '*'
+    return new String(new char[input.length()]).replace('\0', '*');
+  }
 }
 /*
 {"manage_url": "http://canarytokens.org/manage?token=y0all60b627gzp19ahqh7rl6j&auth=09193ea6b8def3e27a1a41f98d4265d7",

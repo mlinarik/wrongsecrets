@@ -22,8 +22,8 @@ public class SecurityHeaderAddingFilter implements Filter {
       httpServletResponse.setHeader("X-Content-Type-Options", "nosniff");
       httpServletResponse.setHeader(
           "Content-Security-Policy",
-          "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'"
-              + " 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'self'; object-src"
+          "default-src 'self'; script-src 'self'; style-src 'self'"
+              + "; img-src 'self' data:; frame-ancestors 'self'; object-src"
               + " 'none'; base-uri 'self'");
     }
     chain.doFilter(request, response);

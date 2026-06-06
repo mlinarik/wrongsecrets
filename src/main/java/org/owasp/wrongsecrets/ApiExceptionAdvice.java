@@ -30,7 +30,7 @@ public class ApiExceptionAdvice {
       ResponseStatusException ex, HttpServletRequest request) {
     ProblemDetail pd = ProblemDetail.forStatus(ex.getStatusCode());
     pd.setTitle(ex.getReason() != null ? ex.getReason() : ex.getStatusCode().toString());
-    pd.setDetail(ex.getMessage());
+    // pd.setDetail(ex.getMessage()); // Removed to avoid information disclosure
     pd.setInstance(URI.create(request.getRequestURI()));
     return pd;
   }
@@ -47,7 +47,7 @@ public class ApiExceptionAdvice {
   public ProblemDetail handleGenericException(Exception ex, HttpServletRequest request) {
     ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
     pd.setTitle("Internal Server Error");
-    pd.setDetail(ex.getMessage());
+    // pd.setDetail(ex.getMessage()); // Removed to avoid information disclosure
     pd.setInstance(URI.create(request.getRequestURI()));
     return pd;
   }
